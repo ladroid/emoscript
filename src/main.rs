@@ -388,7 +388,7 @@ async fn run_code(script: web::Json<Script>) -> impl Responder {
 async fn index() -> impl Responder {
     let api_url = env::var("API_URL").expect("API_URL must be set");
 
-    let mut file = std::fs::read_to_string("index.html").expect("Could not read index.html");
+    let mut file = std::fs::read_to_string("src/index.html").expect("Could not read index.html");
     file = file.replace("API_URL_PLACEHOLDER", &api_url);
 
     HttpResponse::Ok()
