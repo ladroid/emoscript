@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🖊️🎭</title>
+    <style>
+        :root {
+            --color-background: #f5f5f5;
+            --color-text: #333;
+            --color-primary: #007bff;
+            --color-secondary: #fff;
+            --color-border: #ccc;
+        }
+
+        body[data-theme="dark"] {
+            --color-background: #333;
+            --color-text: #f5f5f5;
+            --color-primary: #007bff;
+            --color-secondary: #333;
+            --color-border: #555;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            margin: 0;
+            background-color: var(--color-background);
+            color: var(--color-text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            height: 90vh;
+            overflow: auto;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            color: var(--color-text);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+        }
+        .theme-switch {
+            display: inline-block;
+            height: 34px;
+            position: relative;
+            width: 60px;
+        }
+        .theme-switch input {
+            display: none;
+        }
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            background-color: #fff;
+            bottom: 4px;
+            content: "";
+            height: 26px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 26px;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        textarea#codeArea {
+            width: 100%;
+            height: calc(40vh - 80px);
+            margin-bottom: 30px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 2px solid var(--color-border);
+            resize: none;
+            overflow: auto;
+            background-color: var(--color-secondary);
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        button, a {
+            padding: 10px 20px;
+            text-decoration: none;
+            border: 2px solid var(--color-primary);
+            border-radius: 5px;
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+        }
+        #outputArea {
+            border: 2px solid var(--color-border);
+            padding: 10px;
+            height: calc(40vh - 60px);
+            overflow: auto;
+            border-radius: 5px;
+            background-color: var(--color-secondary);
+            color: var(--color-text);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            EmoScript 
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <div class="slider round"></div>
+                </label>
+            </div>
+        </h1>
+        <textarea id="codeArea"></textarea>
+        <div class="button-container">
+            <button onclick="sendCode()">Run Code</button>
+            <a id="downloadButton" href="#" download="code.txt">Download Code</a>
+            <a id="docButton" href="https://www.github.com/ladroid">Documentation</a>
+        </div>
+        <div id="outputArea"></div>
+    </div>
+
+    <script>
+        const checkbox = document.getElementById('checkbox');
+
+        const currentTheme = localStorage.getItem('theme') ? localStorage.getItem('theme') : null;
+
+        if (currentTheme) {
+            document.body.setAttribute('data-theme', currentTheme);
+            checkbox.checked = currentTheme === 'dark';
+        }
+
+        checkbox.addEventListener('change', () => {
+            let theme = checkbox.checked ? 'dark' : 'light';
+            document.body.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        });
+    </script>
+    <script>
+        const API_URL = "API_URL_PLACEHOLDER";
+
+        function sendCode() {
+            const code = document.getElementById('codeArea').value;
+            fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({code}),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('outputArea').textContent = data;
+            });
+
+            const downloadButton = document.getElementById('downloadButton');
+            const blob = new Blob([code], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            downloadButton.href = url;
+        }
+    </script>
+</body>
+</html>
