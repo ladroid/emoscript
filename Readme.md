@@ -60,7 +60,7 @@ fn main() {
 
 ## How to run
 
-Playground is here -> 
+Playground is here -> https://emoscript.onrender.com/
 
 ## Designing an Emoji-based Programming Language: A Step-by-Step Guide with Rust
 In this tutorial, we'll walk you through the process of designing and implementing an emoji-based programming language using Rust. By the end, you'll have a better understanding of language design principles and will be equipped with the knowledge needed to create your own unique programming language.
